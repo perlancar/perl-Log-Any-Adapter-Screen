@@ -52,11 +52,13 @@ for my $method (Log::Any->logging_methods()) {
 
             return if $logging_levels{$method} <
                 $logging_levels{$self->{min_level}};
+
+            my $nl = $format =~ /\R\z/ ? "" : "\n";
+
             if ($self->{use_color}) {
                 $format = Term::ANSIColor::colored(
                     $format, $self->{colors}{$method} // "");
             }
-            my $nl = $format =~ /\R\z/ ? "" : "\n";
 
             if ($self->{stderr}) {
                 print STDERR $format, $nl;

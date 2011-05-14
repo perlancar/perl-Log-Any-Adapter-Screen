@@ -1,5 +1,12 @@
 Revision history for Log-Any-Adapter-ScreenColoredLevel
 
+0.02    2011-05-14
+
+        [ENHANCEMENTS]
+
+        - Don't add newline again if message already ends with it.
+
+
 0.01    2011-05-14
 
         First release.
