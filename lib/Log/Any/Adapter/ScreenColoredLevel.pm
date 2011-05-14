@@ -56,12 +56,12 @@ for my $method (Log::Any->logging_methods()) {
                 $format = Term::ANSIColor::colored(
                     $format, $self->{colors}{$method} // "");
             }
-            $format = "$format\n";
+            my $nl = $format =~ /\R\z/ ? "" : "\n";
 
             if ($self->{stderr}) {
-                print STDERR $format;
+                print STDERR $format, $nl;
             } else {
-                print $format;
+                print $format, $nl;
             }
         }
     );
