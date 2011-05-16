@@ -95,7 +95,7 @@ __END__
      # colors    => { trace => 'bold yellow on_gray', ... }, # customize colors
      # use_color => 1, # force color even when not interactive
      # stderr    => 0, # print to STDOUT instead of STDERR
-     # formatter => sub { "LOG: $_[2]" }, # default none
+     # formatter => sub { "LOG: $_[1]" }, # default none
  );
 
 
