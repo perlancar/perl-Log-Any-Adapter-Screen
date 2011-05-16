@@ -48,22 +48,26 @@ for my $method (Log::Any->logging_methods()) {
     make_method(
         $method,
         sub {
-            my ($self, $format, @params) = @_;
+            my ($self, $msg, @params) = @_;
 
             return if $logging_levels{$method} <
                 $logging_levels{$self->{min_level}};
 
-            my $nl = $format =~ /\R\z/ ? "" : "\n";
+            my $nl = $msg =~ /\R\z/ ? "" : "\n";
+
+            if ($self->{formatter}) {
+                $msg = $self->{formatter}->($self, $msg);
+            }
 
             if ($self->{use_color}) {
-                $format = Term::ANSIColor::colored(
-                    $format, $self->{colors}{$method} // "");
+                $msg = Term::ANSIColor::colored(
+                    $msg, $self->{colors}{$method} // "");
             }
 
             if ($self->{stderr}) {
-                print STDERR $format, $nl;
+                print STDERR $msg, $nl;
             } else {
-                print $format, $nl;
+                print $msg, $nl;
             }
         }
     );
@@ -91,6 +95,7 @@ __END__
      # colors    => { trace => 'bold yellow on_gray', ... }, # customize colors
      # use_color => 1, # force color even when not interactive
      # stderr    => 0, # print to STDOUT instead of STDERR
+     # formatter => sub { "LOG: $_[2]" }, # default none
  );
 
 
@@ -139,6 +144,16 @@ The default colors are:
 
 Whether to print to STDERR, default is true. If set to 0, will print to STDOUT
 instead.
+
+=item * formatter => CODEREF
+
+Allow formatting message. Default is none.
+
+Message will be passed before being colorized. Coderef will be passed:
+
+ ($self, $message)
+
+and is expected to return the formatted message.
 
 =back
 
