@@ -104,7 +104,8 @@ __END__
 This Log::Any adapter prints log messages to screen (STDERR/STDOUT) colored
 according to level. It is just like
 L<Log::Log4perl::Appender::ScreenColoredLevel>, even down to the default colors,
-except that you don't have to use Log::Log4perl.
+except that you don't have to use Log::Log4perl. Of course, unlike Log4perl, it
+only logs to screen and has minimal features.
 
 Parameters:
 
