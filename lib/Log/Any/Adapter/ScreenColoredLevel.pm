@@ -1,5 +1,4 @@
 package Log::Any::Adapter::ScreenColoredLevel;
-# ABSTRACT: Send logs to screen with colorized messages according to level
 
 use 5.010;
 use strict;
@@ -85,7 +84,7 @@ for my $method (Log::Any->detection_methods()) {
 }
 
 1;
-__END__
+# ABSTRACT: Send logs to screen with colorized messages according to level
 
 =head1 SYNOPSIS
 
