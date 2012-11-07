@@ -9,6 +9,8 @@ use Log::Any::Adapter::Util qw(make_method);
 use base qw(Log::Any::Adapter::Base);
 use Term::ANSIColor;
 
+# VERSION
+
 my @logging_methods = Log::Any->logging_methods;
 my %logging_levels;
 for my $i (0..@logging_methods-1) {
