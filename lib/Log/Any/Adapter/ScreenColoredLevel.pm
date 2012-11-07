@@ -58,9 +58,8 @@ for my $method (Log::Any->logging_methods()) {
                 $msg = $self->{formatter}->($self, $msg);
             }
 
-            if ($self->{use_color}) {
-                $msg = Term::ANSIColor::colored(
-                    $msg, $self->{colors}{$method} // "");
+            if ($self->{use_color} && $self->{colors}{$method}) {
+                $msg = Term::ANSIColor::colored($msg, $self->{colors}{$method});
             }
 
             if ($self->{stderr}) {
