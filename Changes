@@ -1,5 +1,12 @@
 Revision history for Log-Any-Adapter-ScreenColoredLevel
 
+0.05    2014-02-28 (SHARYANTO)
+
+        - No functional changes. Update prereqs in dist.ini, depends on
+          Log::Any::Adapter instead of the now-excluded-from-CPAN-index
+          Log::Any::Adapter::Util.
+
+
 0.04    2012-11-08 (SHARYANTO)
 
         - Avoid undef in Term::ANSIColor::color() by avoiding to hit it if color
