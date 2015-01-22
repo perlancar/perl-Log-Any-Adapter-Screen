@@ -39,7 +39,7 @@ sub init {
         debug     => '',
         info      => 'green',
         notice    => 'green',
-        warning   => 'blue',
+        warning   => 'bold blue',
         error     => 'magenta',
         critical  => 'red',
         alert     => 'red',
