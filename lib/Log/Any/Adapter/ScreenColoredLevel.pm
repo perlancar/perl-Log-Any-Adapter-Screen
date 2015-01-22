@@ -48,35 +48,30 @@ sub init {
     $self->{min_level} //= _default_level();
 }
 
-sub _log {
-    my $method = shift;
-    my ($self, $msg, @params) = @_;
-
-    return if $logging_levels{$method} <
-        $logging_levels{$self->{min_level}};
-
-    my $nl = $msg =~ /\R\z/ ? "" : "\n";
-
-    if ($self->{formatter}) {
-        $msg = $self->{formatter}->($self, $msg);
-    }
-
-    if ($self->{use_color} && $self->{colors}{$method}) {
-        $msg = Term::ANSIColor::colored($msg, $self->{colors}{$method});
-    }
-
-    if ($self->{stderr}) {
-        print STDERR $msg, $nl;
-    } else {
-        print $msg, $nl;
-    }
-}
-
 for my $method (Log::Any->logging_methods()) {
     make_method(
         $method,
         sub {
-            _log($method, @_);
+            my ($self, $msg, @params) = @_;
+
+            return if $logging_levels{$method} <
+                $logging_levels{$self->{min_level}};
+
+            my $nl = $msg =~ /\R\z/ ? "" : "\n";
+
+            if ($self->{formatter}) {
+                $msg = $self->{formatter}->($self, $msg);
+            }
+
+            if ($self->{use_color} && $self->{colors}{$method}) {
+                $msg = Term::ANSIColor::colored($msg, $self->{colors}{$method});
+            }
+
+            if ($self->{stderr}) {
+                print STDERR $msg, $nl;
+            } else {
+                print $msg, $nl;
+            }
         }
     );
 }
