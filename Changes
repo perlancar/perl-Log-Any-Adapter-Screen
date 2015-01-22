@@ -1,10 +1,19 @@
 Revision history for Log-Any-Adapter-ScreenColoredLevel
 
+0.06    2015-01-22 (PERLANCAR)
+
+        - No functional changes.
+
+        - [ux] Tweak color for warning (blue -> bold blue) to make it more
+          readable, like in Log::Any::App.
+
+
 0.05    2014-02-28 (SHARYANTO)
 
-        - No functional changes. Update prereqs in dist.ini, depends on
-          Log::Any::Adapter instead of the now-excluded-from-CPAN-index
-          Log::Any::Adapter::Util.
+        - No functional changes.
+
+        - Update prereqs in dist.ini, depends on Log::Any::Adapter instead of
+          the now-excluded-from-CPAN-index Log::Any::Adapter::Util.
 
 
 0.04    2012-11-08 (SHARYANTO)
