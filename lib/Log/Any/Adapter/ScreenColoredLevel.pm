@@ -1,5 +1,8 @@
 package Log::Any::Adapter::ScreenColoredLevel;
 
+# DATE
+# VERSION
+
 use 5.010001;
 use strict;
 use warnings;
@@ -9,13 +12,13 @@ use Log::Any::Adapter::Util qw(make_method);
 use base qw(Log::Any::Adapter::Base);
 use Term::ANSIColor;
 
-# VERSION
-
 my @logging_methods = Log::Any->logging_methods;
-my %logging_levels;
+our %logging_levels;
 for my $i (0..@logging_methods-1) {
     $logging_levels{$logging_methods[$i]} = $i;
 }
+# some common typos
+$logging_levels{warn} = $logging_levels{warning};
 
 sub _default_level {
     return $ENV{LOG_LEVEL}
@@ -45,30 +48,35 @@ sub init {
     $self->{min_level} //= _default_level();
 }
 
+sub _log {
+    my $method = shift;
+    my ($self, $msg, @params) = @_;
+
+    return if $logging_levels{$method} <
+        $logging_levels{$self->{min_level}};
+
+    my $nl = $msg =~ /\R\z/ ? "" : "\n";
+
+    if ($self->{formatter}) {
+        $msg = $self->{formatter}->($self, $msg);
+    }
+
+    if ($self->{use_color} && $self->{colors}{$method}) {
+        $msg = Term::ANSIColor::colored($msg, $self->{colors}{$method});
+    }
+
+    if ($self->{stderr}) {
+        print STDERR $msg, $nl;
+    } else {
+        print $msg, $nl;
+    }
+}
+
 for my $method (Log::Any->logging_methods()) {
     make_method(
         $method,
         sub {
-            my ($self, $msg, @params) = @_;
-
-            return if $logging_levels{$method} <
-                $logging_levels{$self->{min_level}};
-
-            my $nl = $msg =~ /\R\z/ ? "" : "\n";
-
-            if ($self->{formatter}) {
-                $msg = $self->{formatter}->($self, $msg);
-            }
-
-            if ($self->{use_color} && $self->{colors}{$method}) {
-                $msg = Term::ANSIColor::colored($msg, $self->{colors}{$method});
-            }
-
-            if ($self->{stderr}) {
-                print STDERR $msg, $nl;
-            } else {
-                print $msg, $nl;
-            }
+            _log($method, @_);
         }
     );
 }
