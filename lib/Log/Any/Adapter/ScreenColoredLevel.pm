@@ -46,6 +46,18 @@ sub init {
         emergency => 'red',
     };
     $self->{min_level} //= _default_level();
+
+    $self->{_fh} = $self->{stderr} ? \*STDERR : \*STDOUT;
+}
+
+sub hook_before_log {
+    return;
+    #my ($self, $msg) = @_;
+}
+
+sub hook_after_log {
+    my ($self, $msg) = @_;
+    print { $self->{_fh} } "\n" unless $msg =~ /\n\z/;
 }
 
 for my $method (Log::Any->logging_methods()) {
@@ -57,7 +69,7 @@ for my $method (Log::Any->logging_methods()) {
             return if $logging_levels{$method} <
                 $logging_levels{$self->{min_level}};
 
-            my $nl = $msg =~ /\R\z/ ? "" : "\n";
+            $self->hook_before_log($msg);
 
             if ($self->{formatter}) {
                 $msg = $self->{formatter}->($self, $msg);
@@ -67,11 +79,9 @@ for my $method (Log::Any->logging_methods()) {
                 $msg = Term::ANSIColor::colored($msg, $self->{colors}{$method});
             }
 
-            if ($self->{stderr}) {
-                print STDERR $msg, $nl;
-            } else {
-                print $msg, $nl;
-            }
+            print { $self->{_fh} } $msg;
+
+            $self->hook_after_log($msg);
         }
     );
 }
