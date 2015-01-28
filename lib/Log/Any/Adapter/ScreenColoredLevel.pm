@@ -52,7 +52,7 @@ for my $method (Log::Any->logging_methods()) {
     make_method(
         $method,
         sub {
-            my ($self, $msg, @params) = @_;
+            my ($self, $msg) = @_;
 
             return if $logging_levels{$method} <
                 $logging_levels{$self->{min_level}};
@@ -81,7 +81,7 @@ for my $method (Log::Any->detection_methods()) {
     make_method(
         $method,
         sub {
-            my ($self) = @_;
+            my $self = shift;
             $logging_levels{$level} >= $logging_levels{$self->{min_level}};
         }
     );
