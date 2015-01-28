@@ -100,6 +100,8 @@ for my $method (Log::Any->detection_methods()) {
 1;
 # ABSTRACT: Send logs to screen with colorized messages according to level
 
+=for Pod::Coverage ^(init|hook_.+)$
+
 =head1 SYNOPSIS
 
  use Log::Any::Adapter;
@@ -170,8 +172,6 @@ Message will be passed before being colorized. Coderef will be passed:
 and is expected to return the formatted message.
 
 =back
-
-=for Pod::Coverage init
 
 
 =head1 SEE ALSO

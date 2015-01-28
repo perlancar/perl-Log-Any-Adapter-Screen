@@ -1,5 +1,10 @@
 Revision history for Log-Any-Adapter-ScreenColoredLevel
 
+0.07    2015-01-28 (PERLANCAR)
+
+	- Refactor so it's easier to patch by Progress::Any::Output::Term*.
+
+
 0.06    2015-01-22 (PERLANCAR)
 
         - No functional changes.
