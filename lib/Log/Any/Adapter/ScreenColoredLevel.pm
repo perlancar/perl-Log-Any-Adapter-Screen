@@ -194,6 +194,15 @@ global proxy object.
 =back
 
 
+=head1 ENVIRONMENT
+
+LOG_LEVEL, QUIET, VERBOSE, DEBUG, TRACE. These environment variables can set the
+default for C<min_level>. See documentation about C<min_level> for more details.
+
+LOG_PREFIX. The default formatter groks these variables. See documentation about
+C<formatter> about more details.
+
+
 =head1 SEE ALSO
 
 L<Log::Any>
