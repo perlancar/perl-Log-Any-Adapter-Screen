@@ -11,6 +11,9 @@ use Log::Any;
 use Log::Any::Adapter::Util qw(make_method);
 use base qw(Log::Any::Adapter::Base);
 use Term::ANSIColor;
+use Time::HiRes qw(time);
+
+my $Time0 = time();
 
 my @logging_methods = Log::Any->logging_methods;
 our %logging_levels;
@@ -46,7 +49,15 @@ sub init {
         emergency => 'red',
     };
     $self->{min_level} //= _default_level();
-
+    $self->{formatter} //= sub {
+        my ($self, $msg) = @_;
+        my $env = $ENV{LOG_PREFIX} // '';
+        if ($env eq 'elapsed') {
+            my $time = time();
+            $msg = sprintf("[%9.3fms] %s", ($time - $Time0)*1000, $msg);
+        }
+        $msg;
+    };
     $self->{_fh} = $self->{stderr} ? \*STDERR : \*STDOUT;
 }
 
@@ -163,13 +174,16 @@ instead.
 
 =item * formatter => CODEREF
 
-Allow formatting message. Default is none.
-
-Message will be passed before being colorized. Coderef will be passed:
+Allow formatting message. If defined, message will be passed before being
+colorized. Coderef will be passed:
 
  ($self, $message)
 
 and is expected to return the formatted message.
+
+The default formatter can optionally prefix the message with extra stuffs,
+depending on the content of LOG_PREFIX environment variable, such as: elapsed
+time (e.g. C<< [0.023ms] >>) if LOG_PREFIX is C<elapsed>.
 
 NOTE: Log::Any 1.00+ now has a proxy object which allows
 formatting/customization of message before it is sent to adapter(s), so
