@@ -1,5 +1,13 @@
 Revision history for Log-Any-Adapter-ScreenColoredLevel
 
+0.08    2015-06-18 (PERLANCAR)
+
+	- Add default formatter that can prefix elapsed time (and other
+	  stuffs in the future) depending on LOG_PREFIX.
+
+	- [doc] Note about Log::Any proxy object.
+
+
 0.07    2015-01-28 (PERLANCAR)
 
 	- Refactor so it's easier to patch by Progress::Any::Output::Term*.
