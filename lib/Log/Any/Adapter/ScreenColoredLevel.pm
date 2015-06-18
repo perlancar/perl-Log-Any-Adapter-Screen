@@ -171,6 +171,12 @@ Message will be passed before being colorized. Coderef will be passed:
 
 and is expected to return the formatted message.
 
+NOTE: Log::Any 1.00+ now has a proxy object which allows
+formatting/customization of message before it is sent to adapter(s), so
+formatting does not have to be done on a per-adapter basis. As an alternative to
+this attribute, you can also consider using the proxy object or the (upcoming?)
+global proxy object.
+
 =back
 
 
