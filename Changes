@@ -1,4 +1,12 @@
-Revision history for Log-Any-Adapter-ScreenColoredLevel
+Revision history for Log-Any-Adapter-Screen
+
+0.09    2015-06-19 (PERLANCAR) (unreleased)
+
+        - Rename module/dist from Log-Any-Adapter-ScreenColoredLevel to
+          Log-Any-Adapter-Screen. The old name has roots/ties in Log::Log4perl
+          and is longer to type. I don't see the close ties to Log4perl that
+          important anymore.
+
 
 0.08    2015-06-18 (PERLANCAR)
 

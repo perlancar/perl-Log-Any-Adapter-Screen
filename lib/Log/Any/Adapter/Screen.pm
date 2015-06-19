@@ -1,4 +1,4 @@
-package Log::Any::Adapter::ScreenColoredLevel;
+package Log::Any::Adapter::Screen;
 
 # DATE
 # VERSION
@@ -109,29 +109,28 @@ for my $method (Log::Any->detection_methods()) {
 }
 
 1;
-# ABSTRACT: Send logs to screen with colorized messages according to level
+# ABSTRACT: Send logs to screen, with colors and some other features
 
 =for Pod::Coverage ^(init|hook_.+)$
 
 =head1 SYNOPSIS
 
  use Log::Any::Adapter;
- Log::Any::Adapter->set('ScreenColoredLevel',
+ Log::Any::Adapter->set('Screen',
      # min_level => 'debug', # default is 'warning'
      # colors    => { trace => 'bold yellow on_gray', ... }, # customize colors
      # use_color => 1, # force color even when not interactive
-     # stderr    => 0, # print to STDOUT instead of STDERR
+     # stderr    => 0, # print to STDOUT instead of the default STDERR
      # formatter => sub { "LOG: $_[1]" }, # default none
  );
 
 
 =head1 DESCRIPTION
 
-This Log::Any adapter prints log messages to screen (STDERR/STDOUT) colored
-according to level. It is just like
-L<Log::Log4perl::Appender::ScreenColoredLevel>, even down to the default colors
-(with a tiny difference), except that you don't have to use Log::Log4perl. Of
-course, unlike Log4perl, it only logs to screen and has minimal features.
+This Log::Any adapter prints log messages to screen (STDERR/STDOUT). The
+messages are colored according to level (unless coloring is turned off). It has
+a few other features: allow passing formatter, allow setting level from some
+environment variables, add prefix/timestamps.
 
 Parameters:
 
@@ -204,6 +203,10 @@ C<formatter> about more details.
 
 
 =head1 SEE ALSO
+
+Originally inspired by L<Log::Log4perl::Appender::ScreenColoredLevel>. The old
+name for this adapter is Log::Any::Adapter::ScreenColoredLevel but at some point
+I figure using a shorter name is better for my fingers.
 
 L<Log::Any>
 
