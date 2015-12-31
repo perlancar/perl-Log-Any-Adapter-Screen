@@ -23,18 +23,21 @@ for my $i (0..@logging_methods-1) {
 # some common typos
 $logging_levels{warn} = $logging_levels{warning};
 
-sub _default_level {
+sub _min_level {
+    my $self = shift;
+
     return $ENV{LOG_LEVEL}
         if $ENV{LOG_LEVEL} && $logging_levels{$ENV{LOG_LEVEL}};
     return 'trace' if $ENV{TRACE};
     return 'debug' if $ENV{DEBUG};
     return 'info'  if $ENV{VERBOSE};
     return 'error' if $ENV{QUIET};
-    'warning';
+    $self->{default_level};
 }
 
 sub init {
     my ($self) = @_;
+    $self->{default_level} //= 'warning';
     $self->{stderr}    //= 1;
     $self->{use_color} //= (-t STDOUT);
     $self->{colors}    //= {
@@ -48,7 +51,7 @@ sub init {
         alert     => 'red',
         emergency => 'red',
     };
-    $self->{min_level} //= _default_level();
+    $self->{min_level} //= $self->_min_level;
     $self->{formatter} //= sub {
         my ($self, $msg) = @_;
         my $env = $ENV{LOG_PREFIX} // '';
@@ -189,6 +192,11 @@ formatting/customization of message before it is sent to adapter(s), so
 formatting does not have to be done on a per-adapter basis. As an alternative to
 this attribute, you can also consider using the proxy object or the (upcoming?)
 global proxy object.
+
+=item * default_level => STR (default: warning)
+
+If no level-setting environment variables are defined, will default to this
+level.
 
 =back
 
