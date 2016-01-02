@@ -9,11 +9,12 @@ use warnings;
 
 use Log::Any;
 use Log::Any::Adapter::Util qw(make_method);
-use base qw(Log::Any::Adapter::Base);
-use Term::ANSIColor;
-use Time::HiRes qw(time);
+use parent qw(Log::Any::Adapter::Base);
 
-my $Time0 = time();
+my $CODE_RESET; # PRECOMPUTE
+my $DEFAULT_COLORS; # PRECOMPUTE
+
+my $Time0;
 
 my @logging_methods = Log::Any->logging_methods;
 our %logging_levels;
@@ -40,27 +41,33 @@ sub init {
     $self->{default_level} //= 'warning';
     $self->{stderr}    //= 1;
     $self->{use_color} //= (-t STDOUT);
-    $self->{colors}    //= {
-        trace     => 'yellow',
-        debug     => '',
-        info      => 'green',
-        notice    => 'green',
-        warning   => 'bold blue',
-        error     => 'magenta',
-        critical  => 'red',
-        alert     => 'red',
-        emergency => 'red',
-    };
+    if ($self->{colors}) {
+        require Term::ANSIColor;
+        # convert color names to escape sequence
+        my $orig = $self->{colors};
+        $self->{colors} = {
+            map {($_,($orig->{$_} ? Term::ANSIColor::color($orig->{$_}) : ''))}
+                keys %$orig
+            };
+    } else {
+        $self->{colors} = $DEFAULT_COLORS;
+    }
     $self->{min_level} //= $self->_min_level;
-    $self->{formatter} //= sub {
-        my ($self, $msg) = @_;
-        my $env = $ENV{LOG_PREFIX} // '';
-        if ($env eq 'elapsed') {
-            my $time = time();
-            $msg = sprintf("[%9.3fms] %s", ($time - $Time0)*1000, $msg);
+    if (!$self->{formatter}) {
+        if (($ENV{LOG_PREFIX} // '') eq 'elapsed') {
+            require Time::HiRes;
+            $Time0 //= Time::HiRes::time();
         }
-        $msg;
-    };
+        $self->{formatter} = sub {
+            my ($self, $msg) = @_;
+            my $env = $ENV{LOG_PREFIX} // '';
+            if ($env eq 'elapsed') {
+                my $time = Time::HiRes::time();
+                $msg = sprintf("[%9.3fms] %s", ($time - $Time0)*1000, $msg);
+            }
+            $msg;
+        };
+    }
     $self->{_fh} = $self->{stderr} ? \*STDERR : \*STDOUT;
 }
 
@@ -90,7 +97,7 @@ for my $method (Log::Any->logging_methods()) {
             }
 
             if ($self->{use_color} && $self->{colors}{$method}) {
-                $msg = Term::ANSIColor::colored($msg, $self->{colors}{$method});
+                $msg = $self->{colors}{$method} . $msg . $CODE_RESET;
             }
 
             print { $self->{_fh} } $msg;
