@@ -1,5 +1,11 @@
 Revision history for Log-Any-Adapter-Screen
 
+0.11    2016-01-02 (PERLANCAR)
+
+	- [opt] Reduce startup overhead by 4-5ms (16.8ms to 12ms) in normal
+	  cases by delay-loading Term::ANSIColor and Time::HiRes.
+
+
 0.10    2015-12-31 (PERLANCAR)
 
 	- Add option: default_level to allow configuring default level.
