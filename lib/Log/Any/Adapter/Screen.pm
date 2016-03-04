@@ -11,8 +11,8 @@ use Log::Any;
 use Log::Any::Adapter::Util qw(make_method);
 use parent qw(Log::Any::Adapter::Base);
 
-my $CODE_RESET; # PRECOMPUTE
-my $DEFAULT_COLORS; # PRECOMPUTE
+my $CODE_RESET = do { require Term::ANSIColor; Term::ANSIColor::color('reset') }; # PRECOMPUTE
+my $DEFAULT_COLORS = do { require Term::ANSIColor; my $tmp = {trace=>'yellow', debug=>'', info=>'green',notice=>'green',warning=>'bold blue',error=>'magenta',critical=>'red',alert=>'red',emergency=>'red'}; for (keys %$tmp) { if ($tmp->{$_}) { $tmp->{$_} = Term::ANSIColor::color($tmp->{$_}) } }; $tmp }; # PRECOMPUTE
 
 my $Time0;
 
