@@ -1,5 +1,10 @@
 Revision history for Log-Any-Adapter-Screen
 
+0.13    2016-10-04 (PERLANCAR)
+
+	- Observe COLOR environment to explicitly enable/disable color.
+
+
 0.12    2016-03-04 (PERLANCAR)
 
 	- [Bugfix] Fix logic mistake which causes LOG_LEVEL=trace to not
