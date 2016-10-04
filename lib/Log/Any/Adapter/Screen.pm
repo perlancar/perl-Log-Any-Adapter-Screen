@@ -40,7 +40,7 @@ sub init {
     my ($self) = @_;
     $self->{default_level} //= 'warning';
     $self->{stderr}    //= 1;
-    $self->{use_color} //= (-t STDOUT);
+    $self->{use_color} //= $ENV{COLOR} // (-t STDOUT);
     if ($self->{colors}) {
         require Term::ANSIColor;
         # convert color names to escape sequence
@@ -210,10 +210,27 @@ level.
 
 =head1 ENVIRONMENT
 
-LOG_LEVEL, QUIET, VERBOSE, DEBUG, TRACE. These environment variables can set the
-default for C<min_level>. See documentation about C<min_level> for more details.
+=head2 COLOR => bool
 
-LOG_PREFIX. The default formatter groks these variables. See documentation about
+Can be set to 0 to explicitly disable colors. The default is to check for C<<-t
+STDOUT>>.
+
+=head2 LOG_LEVEL => str
+
+=head2 QUIET => bool
+
+=head2 VERBOSE => bool
+
+=head2 DEBUG => bool
+
+=head2 TRACE => bool
+
+These environment variables can set the default for C<min_level>. See
+documentation about C<min_level> for more details.
+
+=head2 LOG_PREFIX => str
+
+The default formatter groks these variables. See documentation about
 C<formatter> about more details.
 
 
