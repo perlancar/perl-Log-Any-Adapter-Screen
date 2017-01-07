@@ -1,5 +1,3 @@
-Revision history for Log-Any-Adapter-Screen
-
 0.13    2016-10-04 (PERLANCAR)
 
 	- Observe COLOR environment to explicitly enable/disable color.
