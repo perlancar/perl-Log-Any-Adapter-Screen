@@ -1,3 +1,8 @@
+0.140   2018-12-22 (PERLANCAR)
+
+	- Observe NO_COLOR.
+
+
 0.13    2016-10-04 (PERLANCAR)
 
 	- Observe COLOR environment to explicitly enable/disable color.
