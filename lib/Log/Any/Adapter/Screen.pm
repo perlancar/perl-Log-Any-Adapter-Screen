@@ -40,7 +40,15 @@ sub init {
     my ($self) = @_;
     $self->{default_level} //= 'warning';
     $self->{stderr}    //= 1;
-    $self->{use_color} //= $ENV{COLOR} // (-t STDOUT);
+    $self->{use_color} //= do {
+        if (exists $ENV{NO_COLOR}) {
+            0;
+        } elsif (defined $ENV{COLOR}) {
+            $ENV{COLOR};
+        } else {
+            (-t STDOUT);
+        }
+    };
     if ($self->{colors}) {
         require Term::ANSIColor;
         # convert color names to escape sequence
@@ -210,7 +218,11 @@ level.
 
 =head1 ENVIRONMENT
 
-=head2 COLOR => bool
+=head2 NO_COLOR
+
+If defined, will disable color. Consulted before L</COLOR>.
+
+=head2 COLOR
 
 Can be set to 0 to explicitly disable colors. The default is to check for C<<-t
 STDOUT>>.
