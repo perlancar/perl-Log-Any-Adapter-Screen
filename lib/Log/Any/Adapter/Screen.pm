@@ -60,6 +60,8 @@ sub init {
     } else {
         $self->{colors} = $DEFAULT_COLORS;
     }
+    $self->{min_level} = $self->{log_level} if(exists $self->{log_level} && ! exists $self->{min_level});
+    delete $self->{log_level};
     $self->{min_level} //= $self->_min_level;
     if (!$self->{formatter}) {
         if (($ENV{LOG_PREFIX} // '') eq 'elapsed') {
@@ -156,12 +158,17 @@ Parameters:
 
 =item * min_level => STRING
 
+=item * log_level => STRING
+
 Set logging level. Default is warning. If LOG_LEVEL environment variable is set,
 it will be used instead. If TRACE environment variable is set to true, level
 will be set to 'trace'. If DEBUG environment variable is set to true, level will
 be set to 'debug'. If VERBOSE environment variable is set to true, level will be
 set to 'info'.If QUIET environment variable is set to true, level will be set to
 'error'.
+
+Log::Any adapters use parameter C<log_level> instead of C<min_level>.
+If both are present C<min_level> takes precedence.
 
 =item * use_color => BOOL
 
